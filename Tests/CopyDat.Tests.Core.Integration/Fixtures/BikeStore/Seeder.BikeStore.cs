@@ -98,7 +98,6 @@ namespace CopyDat.Tests.Core.Integration.Fixtures.BikeStore
                 .RuleFor(m => m.ListPrice, f => decimal.Parse(f.Commerce.Price(1, 199, 2)))
                 .Generate(250);
 
-            var stockIds = 1;
             var stocks = new Faker<Stocks>()
                 .StrictMode(false)
                 .UseSeed(5354)

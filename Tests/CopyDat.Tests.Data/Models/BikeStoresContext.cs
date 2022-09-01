@@ -6,7 +6,7 @@ namespace CopyDat.Data.Models
 {
     public partial class BikeStoresContext : DbContext
     {
-        private readonly Action<ModelBuilder>? _modelSeeder = null;
+        private readonly Action<ModelBuilder> _modelSeeder = null;
 
         public BikeStoresContext()
         {
@@ -366,8 +366,7 @@ namespace CopyDat.Data.Models
                     .IsUnicode(false);
             });
 
-            if(_modelSeeder != null)
-                _modelSeeder(modelBuilder);
+            _modelSeeder?.Invoke(modelBuilder);
 
             OnModelCreatingPartial(modelBuilder);
         }

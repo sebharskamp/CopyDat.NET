@@ -1,4 +1,5 @@
 ﻿using CopyDat.Data.Models;
+using System;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -6,17 +7,19 @@ namespace CopyDat.Tests.Core.Integration.Fixtures.BikeStore
 {
     public class BikeStoreFixture : IAsyncLifetime
     {
-        private BikeStoresContext _context;
+        private BikeStoresContext? _context;
 
         public BikeStoresContext GetContext()
         {
+            if (_context is null) throw new InvalidOperationException("Something went wrong initializing the context. " +
+                "Make sure to use collection attribute and inject this fixture on and into the test class.");
             return _context;
         }
 
         public async Task InitializeAsync()
         {
             var dbContextFactory = new BikeStoreDbContextFactory();
-            _context = dbContextFactory.CreateDbContext(new string[] { });
+            _context ??= dbContextFactory.CreateDbContext(new string[] { });
             await _context.Database.EnsureCreatedAsync();
         }
 

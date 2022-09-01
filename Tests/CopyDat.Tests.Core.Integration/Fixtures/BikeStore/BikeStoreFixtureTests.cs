@@ -32,9 +32,10 @@ namespace CopyDat.Tests.Core.Integration.Fixtures.BikeStore
         public async Task HasEntity_WhenHasEnsuredToBeCreated(Type type)
         {
             var context = _fixture.GetContext();
-            var toListAsync = GetType().GetMethod(nameof(BikeStoreFixtureTests.AsserNotEmptyCollection), System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-            toListAsync = toListAsync.MakeGenericMethod(new[] { type });
-            await toListAsync.InvokeAsync(this, new[] { context });
+            var assertNotEmpty = GetType().GetMethod(nameof(BikeStoreFixtureTests.AsserNotEmptyCollection), System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+            if (assertNotEmpty is null) throw new MethodAccessException($"{nameof(BikeStoreFixtureTests.AsserNotEmptyCollection)} not found.");
+            assertNotEmpty = assertNotEmpty.MakeGenericMethod(new[] { type });
+            await assertNotEmpty.InvokeAsync(this, new[] { context });
         }
 
         private async Task AsserNotEmptyCollection<T>(BikeStoresContext context) where T : class

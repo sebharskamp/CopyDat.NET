@@ -16,7 +16,7 @@ namespace CopyDat.Core.Extensions
             {
                 connectionString = sqlServerOptionsExtension.ConnectionString;
             }
-            var context = (T)Activator.CreateInstance(typeof(T), new object[] { optionsBuilder.Options }) ?? throw new InvalidOperationException($"Unable to establish connection with {connectionString}");
+            var context = (T)(Activator.CreateInstance(typeof(T), new object[] { optionsBuilder.Options }) ?? throw new InvalidOperationException($"Unable to establish connection with {connectionString}"));
             if (ensureCreated)
             {
                 await context.Database.EnsureCreatedAsync();
