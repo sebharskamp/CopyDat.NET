@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace CopyDat.Data.Models
+namespace CopyDat.Tests.Data.Models.BikeStore
 {
     public partial class Staffs
     {

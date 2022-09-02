@@ -102,11 +102,11 @@ namespace CopyDat.Core
             if (filter != null)
             {
                 var filterStrategy = filter.GetType();
-                if (filterStrategy.GetInterfaces().Any(i => i.GetGenericArguments().Any(a => a.GetInterfaces().Any(ai => ai == typeof(IFilterStrategyPrerequisite)))))
+/*                if (filterStrategy.GetInterfaces().Any(i => i.GetGenericArguments().Any(a => a.GetInterfaces().Any(ai => ai == typeof(IFilterStrategyPrerequisite)))))
                 {
                     var setPrerequisite = filterStrategy.GetMethod(_setPrerequisiteMethodName) ?? throw new MissingMethodException(_setPrerequisiteMethodName);
                     setPrerequisite.Invoke(filter, new[] { filters.First(qq => qq.GetType().GetInterface(nameof(IFilterStrategyPrerequisite)) != null) });
-                }
+                }*/
                 var predicates = filterStrategy.GetMethod(_predicateMethodName) ?? throw new MissingMethodException(_predicateMethodName);
                 predicates = predicates.MakeGenericMethod(new[] { entityType });
                 predicate = predicates?.Invoke(filter, null);

@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace CopyDat.Data.Models
+namespace CopyDat.Tests.Data.Models.BikeStore
 {
-    public partial class Products: IContainProduct
+    public partial class Products
     {
         public Products()
         {

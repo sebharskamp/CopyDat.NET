@@ -1,5 +1,4 @@
-﻿using CopyDat.Data.Models;
-using CopyDat.Core;
+﻿using CopyDat.Core;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 using Xunit;
@@ -7,6 +6,7 @@ using CopyDat.Core.Extensions;
 using FluentAssertions;
 using CopyDat.Tests.Core.Integration.Fixtures.BikeStore;
 using System.Linq;
+using CopyDat.Tests.Data.Models.BikeStore;
 
 namespace CopyDat.Tests.Core.Integration
 {
@@ -55,3 +55,5 @@ namespace CopyDat.Tests.Core.Integration
         }
     }
 }
+
+

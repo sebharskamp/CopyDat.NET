@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace CopyDat.Data.Models
+namespace CopyDat.Tests.Data.Models.BikeStore
 {
-    public partial class OrderItems: IContainProduct
+    public partial class OrderItems
     {
         public int OrderId { get; set; }
         public int ItemId { get; set; }

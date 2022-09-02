@@ -1,4 +1,3 @@
-using CopyDat.Data.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -6,6 +5,7 @@ using System.Threading.Tasks;
 using Xunit;
 using CopyDat.Core.Extensions;
 using System.Collections;
+using CopyDat.Tests.Data.Models.BikeStore;
 
 namespace CopyDat.Tests.Core.Integration.Fixtures.BikeStore
 {

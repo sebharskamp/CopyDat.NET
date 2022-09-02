@@ -1,18 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace CopyDat.Data.Models
+namespace CopyDat.Tests.Data.Models.BikeStore
 {
-    public partial class Customers
+    public partial class Stores
     {
-        public Customers()
+        public Stores()
         {
             Orders = new HashSet<Orders>();
+            Staffs = new HashSet<Staffs>();
+            Stocks = new HashSet<Stocks>();
         }
 
-        public int CustomerId { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
+        public int StoreId { get; set; }
+        public string StoreName { get; set; }
         public string Phone { get; set; }
         public string Email { get; set; }
         public string Street { get; set; }
@@ -21,5 +22,7 @@ namespace CopyDat.Data.Models
         public string ZipCode { get; set; }
 
         public virtual ICollection<Orders> Orders { get; set; }
+        public virtual ICollection<Staffs> Staffs { get; set; }
+        public virtual ICollection<Stocks> Stocks { get; set; }
     }
 }

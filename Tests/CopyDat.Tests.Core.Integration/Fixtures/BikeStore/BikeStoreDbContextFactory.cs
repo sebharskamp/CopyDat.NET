@@ -1,4 +1,4 @@
-﻿using CopyDat.Data.Models;
+﻿using CopyDat.Tests.Data.Models.BikeStore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 

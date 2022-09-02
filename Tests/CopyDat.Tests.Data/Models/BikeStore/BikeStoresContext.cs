@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
-namespace CopyDat.Data.Models
+namespace CopyDat.Tests.Data.Models.BikeStore
 {
     public partial class BikeStoresContext : DbContext
     {
@@ -19,7 +19,7 @@ namespace CopyDat.Data.Models
 
         public BikeStoresContext(DbContextOptions<BikeStoresContext> options, Action<ModelBuilder> modelSeeder)
             : base(options)
-                {
+        {
             _modelSeeder = modelSeeder;
         }
 

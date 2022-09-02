@@ -1,15 +1,16 @@
-﻿using CopyDat.Tests.Data.Models.BikeStore;
+﻿using CopyDat.Tests.Core.Integration.Fixtures.BikeStore;
+using CopyDat.Tests.Data.Models.Tenant;
 using System;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace CopyDat.Tests.Core.Integration.Fixtures.BikeStore
+namespace CopyDat.Tests.Core.Integration.Fixtures.Tenant
 {
-    public class BikeStoreFixture : IAsyncLifetime
+    public class TenantFixture : IAsyncLifetime
     {
-        private BikeStoresContext? _context;
+        private TenantContext? _context;
 
-        public BikeStoresContext GetContext()
+        public TenantContext GetContext()
         {
             if (_context is null) throw new InvalidOperationException("Something went wrong initializing the context. " +
                 "Make sure to use collection attribute and inject this fixture on and into the test class.");
@@ -18,7 +19,7 @@ namespace CopyDat.Tests.Core.Integration.Fixtures.BikeStore
 
         public async Task InitializeAsync()
         {
-            var dbContextFactory = new BikeStoreDbContextFactory();
+            var dbContextFactory = new TenantDbContextFactory();
             _context ??= dbContextFactory.CreateDbContext(new string[] { });
             await _context.Database.EnsureCreatedAsync();
         }

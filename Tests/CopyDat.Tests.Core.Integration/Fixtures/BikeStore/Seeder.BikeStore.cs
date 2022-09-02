@@ -1,11 +1,11 @@
 ﻿using Bogus;
-using CopyDat.Data.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using CopyDat.Tests.Data.Models.BikeStore;
 
 namespace CopyDat.Tests.Core.Integration.Fixtures.BikeStore
 {
