@@ -11,9 +11,8 @@ namespace CopyDat.Tests.Core.Integration.Fixtures.Tenant
         {
             var optionsBuilder = new DbContextOptionsBuilder<TenantContext>();
             optionsBuilder.UseSqlServer(
-              "Server=.\\SQLExpress;Database=SourceDb.Testing;Trusted_Connection=True;");
-
-            return new TenantContext(optionsBuilder.Options, Seeder.GetTenant());
+              "Server=.\\SQLExpress;Database=SourceDb.Tenant.Testing;Trusted_Connection=True;");
+            return new TenantContext(optionsBuilder.Options);
         }
     }
 }

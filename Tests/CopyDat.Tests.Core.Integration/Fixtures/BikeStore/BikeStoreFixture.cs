@@ -21,6 +21,7 @@ namespace CopyDat.Tests.Core.Integration.Fixtures.BikeStore
             var dbContextFactory = new BikeStoreDbContextFactory();
             _context ??= dbContextFactory.CreateDbContext(new string[] { });
             await _context.Database.EnsureCreatedAsync();
+            await _context.PopulateAsync(Seeder.GetBikeStore());
         }
 
         public async Task DisposeAsync()

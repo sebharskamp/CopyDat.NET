@@ -10,11 +10,11 @@ using CopyDat.Tests.Data.Models.BikeStore;
 namespace CopyDat.Tests.Core.Integration.Fixtures.BikeStore
 {
     [Collection(nameof(BikeStoreFixtureCollection))]
-    public class BikeStoreFixtureTests
+    public class BikeStoreFixtureSeed
     {
         private readonly BikeStoreFixture _fixture;
 
-        public BikeStoreFixtureTests(BikeStoreFixture fixture)
+        public BikeStoreFixtureSeed(BikeStoreFixture fixture)
         {
             _fixture = fixture;
         }
@@ -32,8 +32,8 @@ namespace CopyDat.Tests.Core.Integration.Fixtures.BikeStore
         public async Task HasEntity_WhenHasEnsuredToBeCreated(Type type)
         {
             var context = _fixture.GetContext();
-            var assertNotEmpty = GetType().GetMethod(nameof(BikeStoreFixtureTests.AsserNotEmptyCollection), System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-            if (assertNotEmpty is null) throw new MethodAccessException($"{nameof(BikeStoreFixtureTests.AsserNotEmptyCollection)} not found.");
+            var assertNotEmpty = GetType().GetMethod(nameof(BikeStoreFixtureSeed.AsserNotEmptyCollection), System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+            if (assertNotEmpty is null) throw new MethodAccessException($"{nameof(BikeStoreFixtureSeed.AsserNotEmptyCollection)} not found.");
             assertNotEmpty = assertNotEmpty.MakeGenericMethod(new[] { type });
             await assertNotEmpty.InvokeAsync(this, new[] { context });
         }

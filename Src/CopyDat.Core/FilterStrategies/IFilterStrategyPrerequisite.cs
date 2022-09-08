@@ -8,7 +8,7 @@ namespace CopyDat.Core.FilterStrategies
 
     public interface IFilterStrategyPrerequisite<T> : IFilterStrategyPrerequisite
     {
-        public T Result { get; }
+        public IEnumerable<T> Result { get; }
         public void SetResult(IEnumerable<T> results);
     }
 }

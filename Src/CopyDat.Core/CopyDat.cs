@@ -13,7 +13,6 @@ namespace CopyDat.Core
 {
     public class CopyDat<TDbContext> : IDisposable where TDbContext : DbContext
     {
-        private const string _setPrerequisiteMethodName = nameof(IFilterStrategy<object, IFilterStrategyPrerequisite>.SetPrerequisite);
         private const string _predicateMethodName = nameof(IFilterStrategy<object>.Predicate);
         private readonly TDbContext _sourceContext;
         private readonly TDbContext _targetContext;
@@ -59,6 +58,7 @@ namespace CopyDat.Core
 
                 await targetHandler.SetValuesAsync(entityType, results);
             }
+            await targetHandler.SaveChangesAsync(true);
         }
 
         public async Task CopyAsync(List<IFilterStrategy> query)
@@ -81,6 +81,7 @@ namespace CopyDat.Core
 
                 await targetHandler.SetValuesAsync(entityType, results);
             }
+            await targetHandler.SaveChangesAsync(true);
         }
 
         private static void AddResultToFilterPrerequisites(IFilterStrategy q, object? results)

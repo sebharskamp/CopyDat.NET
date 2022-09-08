@@ -14,6 +14,5 @@ namespace CopyDat.Core.FilterStrategies
     }
     public interface IFilterStrategy<T, in TPrerequisite> : IFilterStrategy<T> where TPrerequisite : IFilterStrategyPrerequisite
     {
-        public IFilterStrategy<T, TPrerequisite> SetPrerequisite(TPrerequisite prerequisite);
     }
 }

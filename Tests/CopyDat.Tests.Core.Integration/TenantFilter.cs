@@ -1,6 +1,6 @@
-﻿using CopyDat.Core.Builders;
-using CopyDat.Core.FilterStrategies;
+﻿using CopyDat.Core.FilterStrategies;
 using CopyDat.Tests.Data.Models.Tenant;
+using LinqKit;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,76 +11,56 @@ namespace CopyDat.Tests.Core.Integration
     internal class TenantFilter: IFilterStrategyPrerequisite<Tenant>, IFilterStrategy<Tenant>
     {
         private readonly int _filterOnTenantId;
-        private Tenant _tenant;
 
         public TenantFilter(int filterOnTenantId)
         {
             _filterOnTenantId = filterOnTenantId;
         }
 
-        public Tenant Result => _tenant;
+        public IEnumerable<Tenant> Result { get; private set; }
 
         public Func<Type, bool> Activator => t => t == typeof(Tenant);
 
         public Expression<Func<TDbEntity, bool>> Predicate<TDbEntity>() where TDbEntity : Tenant
         {
-            return (Expression<Func<TDbEntity, bool>>)ExpressionBuilder.CreateEquals<TDbEntity, int>(t => t.Id, _filterOnTenantId);
+            return t => t.Id == 1;
         }
 
         public void SetResult(IEnumerable<Tenant> results)
         {
-            _tenant = results.First();
+            Result = results;
         }
     }
 
-    internal class SubscriptionEntityFilter : IFilterStrategy<TenantEntity, TenantFilter>, IFilterStrategyPrerequisite<Subscription>
+    internal class SubscriptionEntityFilter : FilterStrategyWithPrerequisiteBase<TenantEntity, TenantFilter>, IFilterStrategyPrerequisite<Subscription>
     {
-        private TenantFilter _tenantFilter;
-
-        public Func<Type, bool> Activator => t => t.BaseType == typeof(TenantEntity);
-
-        public Subscription Result { get; set; }
-
-        public Expression<Func<TDbEntity, bool>> Predicate<TDbEntity>() where TDbEntity : TenantEntity
+        public SubscriptionEntityFilter(TenantFilter prerequisiteFilter, Func<Type, bool> activator) : base(prerequisiteFilter, activator)
         {
-            return (Expression<Func<TDbEntity, bool>>)ExpressionBuilder.CreateEquals<TDbEntity, Guid>(
-                tde => tde.TenantIdentifier, _tenantFilter.Result.Identifier);
         }
 
-        public IFilterStrategy<TenantEntity, TenantFilter> SetPrerequisite(TenantFilter prerequisite)
+        public IEnumerable<Subscription>? Result { get; set; }
+
+        public override Expression<Func<TDbEntity, bool>> Predicate<TDbEntity>()
         {
-            _tenantFilter = prerequisite;
-            return this;
+            return s => s.TenantIdentifier == _prerequisiteFilter.Result.First().Identifier;
         }
 
         public void SetResult(IEnumerable<Subscription> results)
         {
-            Result = results.First();
+            Result = results;
         }
     }
 
 
-    internal class ResourceGroupEntityFilter : IFilterStrategy<SubscriptionEntity, SubscriptionEntityFilter>
+    internal class ResourceGroupEntityFilter : FilterStrategyWithPrerequisiteBase<SubscriptionEntity, SubscriptionEntityFilter>
     {
-        private SubscriptionEntityFilter _subscriptionFilter;
-
-        public ResourceGroupEntityFilter()
+        public ResourceGroupEntityFilter(SubscriptionEntityFilter prerequisiteFilter, Func<Type, bool> activator) : base(prerequisiteFilter, activator)
         {
         }
 
-        public Func<Type, bool> Activator => t => t.BaseType == typeof(SubscriptionEntity);
-
-        public Expression<Func<TDbEntity, bool>> Predicate<TDbEntity>() where TDbEntity : SubscriptionEntity
+        public override Expression<Func<TDbEntity, bool>> Predicate<TDbEntity>()
         {
-            return (Expression<Func<TDbEntity, bool>>)ExpressionBuilder.CreateEquals<TDbEntity, Guid>
-                (tde => tde.SubscriptionIdentifier, _subscriptionFilter.Result.Identifier);
-
-        }
-
-        public IFilterStrategy<SubscriptionEntity, SubscriptionEntityFilter> SetPrerequisite(SubscriptionEntityFilter prerequisite)
-        {
-            _subscriptionFilter = prerequisite;
-            return this;
+            return PredicateBuilder.New<TDbEntity>(r => _prerequisiteFilter.Result.Select(res => res.Identifier).Any(i => i == r.SubscriptionIdentifier));
         }
     }
 }

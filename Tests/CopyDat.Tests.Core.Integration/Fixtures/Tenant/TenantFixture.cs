@@ -22,6 +22,7 @@ namespace CopyDat.Tests.Core.Integration.Fixtures.Tenant
             var dbContextFactory = new TenantDbContextFactory();
             _context ??= dbContextFactory.CreateDbContext(new string[] { });
             await _context.Database.EnsureCreatedAsync();
+            await _context.PopulateAsync(Seeder.GetTenant());
         }
 
         public async Task DisposeAsync()

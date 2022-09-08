@@ -11,8 +11,6 @@ namespace CopyDat.Tests.Data.Models.Tenant
 {
     public partial class TenantContext : DbContext
     {
-        private readonly Action<ModelBuilder> _modelSeeder = null;
-
         public TenantContext()
         {
         }
@@ -20,12 +18,6 @@ namespace CopyDat.Tests.Data.Models.Tenant
         public TenantContext(DbContextOptions<TenantContext> options)
             : base(options)
         {
-        }
-
-        public TenantContext(DbContextOptions<TenantContext> options, Action<ModelBuilder> modelSeeder)
-            : base(options)
-        {
-            _modelSeeder = modelSeeder;
         }
 
         public virtual DbSet<Tenant> Tenants { get; set; }
@@ -47,21 +39,39 @@ namespace CopyDat.Tests.Data.Models.Tenant
                 entity.HasKey(e => e.Identifier)
                     .HasName("PK__Tenant__5E5A8E221837AEF2");
 
-                entity.ToTable("tenant");
+                entity.ToTable(nameof(Tenant));
 
                 entity.Property(e => e.Id);
 
                 entity.Property(e => e.Name)
                     .IsRequired()
-                    .HasColumnName("name")
                     .HasMaxLength(255)
                     .IsUnicode(false);
 
                 entity.Property(e => e.Identifier)
                     .IsRequired()
-                    .HasColumnName("identifier")
                     .HasMaxLength(Guid.NewGuid().ToString().Length)
                     .IsUnicode(false);
+            });
+
+            modelBuilder.Entity<Subscription>(entity =>
+            {
+                entity.HasKey(e => e.Identifier)
+                    .HasName("PK__Subscription__5E5A8E273837AEF2");
+
+                entity.ToTable(nameof(Subscription));
+
+                entity.Property(e => e.Owner)
+                    .IsRequired()
+                    .HasMaxLength(255)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Identifier)
+                    .IsRequired()
+                    .HasMaxLength(Guid.NewGuid().ToString().Length)
+                    .IsUnicode(false);
+
+                entity.HasTenant(e => e.Subscriptions);
             });
 
             modelBuilder.Entity<ResourceGroup>(entity =>
@@ -69,11 +79,12 @@ namespace CopyDat.Tests.Data.Models.Tenant
                 entity.HasKey(e => e.Id)
                     .HasName("PK__ResourceGroup__5E5A8E273837AEF2");
 
-                entity.ToTable("ResourceGroup");
+                entity.ToTable(nameof(ResourceGroup));
+
+                entity.Property(e => e.Id);
 
                 entity.Property(e => e.Name)
                     .IsRequired()
-                    .HasColumnName("name")
                     .HasMaxLength(255)
                     .IsUnicode(false);
 
@@ -82,31 +93,6 @@ namespace CopyDat.Tests.Data.Models.Tenant
                   .HasForeignKey(d => d.SubscriptionIdentifier)
                   .HasConstraintName("FK__subscription__resourcegroup__4E88ABD4");
             });
-
-            modelBuilder.Entity<Subscription>(entity =>
-            {
-                entity.HasKey(e => e.Identifier)
-                    .HasName("PK__Subscription__5E5A8E273837AEF2");
-
-                entity.ToTable("Subscription");
-
-                entity.Property(e => e.Owner)
-                    .IsRequired()
-                    .HasColumnName("owner")
-                    .HasMaxLength(255)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.Identifier)
-                    .IsRequired()
-                    .HasColumnName("name")
-                    .HasMaxLength(Guid.NewGuid().ToString().Length)
-                    .IsUnicode(false);
-
-                entity.HasTenant(e => e.Subscriptions);
-            });
-
-            _modelSeeder?.Invoke(modelBuilder);
-
         }
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
     }

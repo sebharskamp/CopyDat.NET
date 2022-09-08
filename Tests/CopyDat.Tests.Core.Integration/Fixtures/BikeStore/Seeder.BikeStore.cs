@@ -4,14 +4,13 @@ using System.Linq;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq.Expressions;
 using CopyDat.Tests.Data.Models.BikeStore;
 
 namespace CopyDat.Tests.Core.Integration.Fixtures.BikeStore
 {
     internal partial class Seeder
     {
-        internal static Action<ModelBuilder> GetBikeStore()
+        internal static Dictionary<Type, object?> GetBikeStore()
         {
 
             var brandIds = 1;
@@ -119,44 +118,18 @@ namespace CopyDat.Tests.Core.Integration.Fixtures.BikeStore
 
             // generate 1000 items
 
-            return modelBuilder =>
+            return new Dictionary<Type, object?>
             {
-                modelBuilder
-                    .Entity<Brands>()
-                    .HasData(brands);
-                modelBuilder
-                    .Entity<Categories>()
-                    .HasData(categories);
-                modelBuilder
-                    .Entity<Customers>()
-                    .HasData(customers);
-                modelBuilder
-                    .Entity<Stores>()
-                    .HasData(stores);
-                modelBuilder
-                    .Entity<Staffs>()
-                    .HasData(staffs);
-                modelBuilder
-                    .Entity<Orders>()
-                    .HasData(orders);
-                modelBuilder
-                    .Entity<Products>()
-                    .HasData(products);
-                modelBuilder
-                    .Entity<OrderItems>()
-                    .HasData(orderItems);
-                modelBuilder
-                    .Entity<Stocks>()
-                    .HasData(stocks.AsCleanRelationTable(1000, s => s.StoreId, s => s.ProductId));
+                {typeof(Brands), brands},
+                {typeof(Categories), categories},
+                {typeof(Customers), customers},
+                {typeof(Stores), stores},
+                {typeof(Staffs), staffs},
+                {typeof(Orders), orders},
+                {typeof(Products), products},
+                {typeof(OrderItems), orderItems},
+                {typeof(Stocks), stocks.AsCleanRelationTable(1000, s => s.StoreId, s => s.ProductId) }
             };
         }
-    }
-}
-
-public static class FakerExtensions
-{
-    public static List<T> AsCleanRelationTable<T, TProp1, TProp2>(this Faker<T> fakerSet, int numToSeed, Expression<Func<T, TProp1>> propertyOne, Expression<Func<T, TProp2>> propertyTwo) where T : class
-    {
-        return fakerSet.Generate(numToSeed).GroupBy(c => new { propertyOne, propertyTwo }).Select(c => c.FirstOrDefault()).ToList();
     }
 }

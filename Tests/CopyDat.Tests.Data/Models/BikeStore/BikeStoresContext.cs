@@ -6,7 +6,6 @@ namespace CopyDat.Tests.Data.Models.BikeStore
 {
     public partial class BikeStoresContext : DbContext
     {
-        private readonly Action<ModelBuilder> _modelSeeder = null;
 
         public BikeStoresContext()
         {
@@ -15,12 +14,6 @@ namespace CopyDat.Tests.Data.Models.BikeStore
         public BikeStoresContext(DbContextOptions<BikeStoresContext> options)
             : base(options)
         {
-        }
-
-        public BikeStoresContext(DbContextOptions<BikeStoresContext> options, Action<ModelBuilder> modelSeeder)
-            : base(options)
-        {
-            _modelSeeder = modelSeeder;
         }
 
         public virtual DbSet<Brands> Brands { get; set; }
@@ -365,8 +358,6 @@ namespace CopyDat.Tests.Data.Models.BikeStore
                     .HasColumnName("zip_code")
                     .IsUnicode(false);
             });
-
-            _modelSeeder?.Invoke(modelBuilder);
 
             OnModelCreatingPartial(modelBuilder);
         }
